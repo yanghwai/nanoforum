@@ -13,9 +13,11 @@ public class Topic {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "uid")
-    private AppUser author;
+    @Column(name = "uid")
+    private int authorId;
+
+    @Transient
+    private String authorName;
 
     @Column(name = "posttime")
     private Timestamp postTime;
@@ -49,12 +51,20 @@ public class Topic {
         this.id = id;
     }
 
-    public AppUser getAuthor() {
-        return author;
+    public int getAuthorId() {
+        return authorId;
     }
 
-    public void setAuthor(AppUser author) {
-        this.author = author;
+    public void setAuthorId(int authorId) {
+        this.authorId = authorId;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
     }
 
     public Timestamp getPostTime() {
@@ -82,14 +92,16 @@ public class Topic {
     }
 
     // toString
+
+
     @Override
     public String toString() {
         return "Topic{" +
                 "id=" + id +
+                ", authorId=" + authorId +
                 ", postTime=" + postTime +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 '}';
     }
-
 }

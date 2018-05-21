@@ -75,11 +75,14 @@ public class TopicController {
 
         AppUser currentUser = userService.findBySSO(currentUsername);
 
-        topic.setAuthor(currentUser);
+        topic.setAuthorName(currentUsername);
+        topic.setAuthorId(currentUser.getId());
 
         if (topic.getPostTime() == null) {
             topic.setPostTime(DateTimeUtil.getCurrentDateTime());
         }
+
+        logger.info(">>>Topic to save is: "+ topic);
         topicService.save(topic);
         return "redirect:/topic/list";
     }

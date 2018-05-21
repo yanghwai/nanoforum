@@ -48,7 +48,7 @@
 
                     <%--construct a "send message" link with user id--%>
                     <c:url var="sendMsgLink" value="/message/sendNewMessage">
-                        <c:param name="userId" value="${tmpTopic.author.id}"/>
+                        <c:param name="userId" value="${tmpTopic.authorId}"/>
                     </c:url>
 
 
@@ -57,7 +57,7 @@
                             <a href="${topicLink}">${tmpTopic.title}</a>
                         </td>
                         <td>
-                            <a href="${sendMsgLink}">${tmpTopic.author.ssoId}</a>
+                            <a href="${sendMsgLink}">${tmpTopic.authorName}</a>
                         </td>
                         <td>${tmpTopic.postTime}</td>
 

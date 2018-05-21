@@ -16,7 +16,6 @@ import java.util.List;
 public class UserAdminController {
 
     private UserService userService;
-
     // inject user service
     @Autowired
     public void setUserService(UserService userService) {

@@ -28,7 +28,6 @@ public class MessageController {
     private MessageService messageService;
     private UserService userService;
 
-
     @Autowired
     public void setMessageService(MessageService messageService) {
         this.messageService = messageService;

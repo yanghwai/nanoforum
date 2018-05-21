@@ -39,7 +39,7 @@
 
             <hr>
 
-            <h4>Posted by ${topic.author.ssoId} on ${topic.postTime}</h4>
+            <h4>Posted by ${topic.authorName} on ${topic.postTime}</h4>
 
             <hr>
             <h4>Content:</h4>
