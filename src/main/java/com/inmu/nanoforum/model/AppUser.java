@@ -39,14 +39,6 @@ public class AppUser {
     private Set<UserRole> userRoles;
 
 
-    @OneToMany(cascade ={CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
-            mappedBy = "sender")
-    private Set<Message> outbox;
-
-    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
-            mappedBy = "receiver")
-    private Set<Message> inbox;
-
     public Integer getId() {
         return id;
     }
@@ -103,21 +95,6 @@ public class AppUser {
         this.userRoles = userRoles;
     }
 
-    public Set<Message> getOutbox() {
-        return outbox;
-    }
-
-    public void setOutbox(Set<Message> outbox) {
-        this.outbox = outbox;
-    }
-
-    public Set<Message> getInbox() {
-        return inbox;
-    }
-
-    public void setInbox(Set<Message> inbox) {
-        this.inbox = inbox;
-    }
 
     /*
      * DO-NOT-INCLUDE passwords in toString function.

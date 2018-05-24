@@ -1,9 +1,11 @@
 package com.inmu.nanoforum.controller;
 
+import com.inmu.nanoforum.model.AppUser;
 import com.inmu.nanoforum.model.Topic;
 import com.inmu.nanoforum.service.TopicService;
 import com.inmu.nanoforum.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-public class TopicRestController {
+public class DemoRestController {
 
     private TopicService topicService;
     private UserService userService;
@@ -30,6 +32,12 @@ public class TopicRestController {
     @GetMapping("/topics")
     public List<Topic> getTopics(){
         return topicService.findAllTopics();
+    }
+
+    @GetMapping("/users")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<AppUser> getAppUsers(){
+        return userService.findAllUsers();
     }
 
 }

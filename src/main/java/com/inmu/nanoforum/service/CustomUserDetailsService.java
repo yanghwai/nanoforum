@@ -20,8 +20,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private static final Logger logger = Logger.getLogger(CustomUserDetailsService.class.getName());
 
-    @Autowired
     private UserService userService;
+
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
 
     @Transactional(readOnly=true)
     @Override

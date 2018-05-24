@@ -58,7 +58,7 @@ public class MessageController {
 
         model.addAttribute("outbox", outbox);
 
-        return "list-messages";
+        return "message/list-messages";
     }
 
     @GetMapping("/sendNewMessage")
@@ -66,14 +66,22 @@ public class MessageController {
         Message message = new Message();
 
         AppUser theReceiver = userService.findById(uid);
-        message.setReceiver(theReceiver);
-        AppUser currentUser = userService.findBySSO(principal.getName());
-        message.setSender(currentUser);
 
+        if(theReceiver==null){
+            model.addAttribute("errorMessage","Receiver does not exist!");
+            return "error";
+        }
+
+        message.setReceiverId(theReceiver.getId());
+        message.setReceiverSsoId(theReceiver.getSsoId());
+
+        AppUser currentUser = userService.findBySSO(principal.getName());
+        message.setSenderId(currentUser.getId());
+        message.setSenderSsoId(currentUser.getSsoId());
 
         model.addAttribute("theMessage", message);
 
-        return "message-form";
+        return "message/message-form";
     }
 
     @PostMapping("/send")
@@ -90,6 +98,18 @@ public class MessageController {
         messageService.save(message);
 
         sessionStatus.setComplete();
+
+        return "redirect:/message/list";
+    }
+
+    @PostMapping("/setRead")
+    public String setMessageReadFlag(@RequestParam("msgId") int msgId){
+
+        Message theMsg = messageService.getById(msgId);
+
+        theMsg.setRead(true);
+
+        messageService.save(theMsg);
 
         return "redirect:/message/list";
     }

@@ -9,33 +9,27 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-
 @Controller
-@RequestMapping("/systems/user")
-public class UserAdminController {
+@RequestMapping("/user")
+public class UserController {
 
     private UserService userService;
-    // inject user service
+
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
 
-    @GetMapping("/list")
-    public String listUsers(Model model){
-        // get user list from service
-        List<AppUser> userList = userService.findAllUsers();
+    @GetMapping("/info")
+    public String showUserInfoPage(@RequestParam("userId") int uid, Model model){
+        AppUser appUser = userService.findById(uid);
+        if(appUser == null){
+            model.addAttribute("errorMessage", "User does not exists.");
+            return "error";
+        }
 
-        // add attribute to model
-        model.addAttribute("users", userList);
-        return "user/list-users";
-    }
-
-    @GetMapping("/delete")
-    public String deleteUser(@RequestParam("userId") int theId){
-        userService.deleteById(theId);
-        return "redirect:/systems/user/list";
+        model.addAttribute("user", appUser);
+        return "user/user-info";
     }
 
 }

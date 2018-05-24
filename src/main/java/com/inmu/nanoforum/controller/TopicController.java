@@ -43,7 +43,7 @@ public class TopicController {
         List<Topic> topicList = topicService.findAllTopics();
         model.addAttribute("topics", topicList);
 
-        return "list-topics";
+        return "topic/list-topics";
     }
 
 
@@ -53,7 +53,7 @@ public class TopicController {
 
         model.addAttribute("topics", topicList);
 
-        return "list-topics";
+        return "topic/list-topics";
     }
 
 
@@ -63,7 +63,7 @@ public class TopicController {
         Topic topic = new Topic();
         model.addAttribute("topic", topic);
 
-        return "topic-form";
+        return "topic/topic-form";
     }
 
     @PostMapping("/saveTopic")
@@ -94,7 +94,7 @@ public class TopicController {
 
         model.addAttribute("topic", topic);
 
-        return "topic-page";
+        return "topic/topic-page";
     }
 
     @PostMapping("/delete")
@@ -107,4 +107,6 @@ public class TopicController {
 
         return "redirect:/topic/list";
     }
+
+
 }

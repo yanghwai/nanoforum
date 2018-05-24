@@ -31,7 +31,7 @@ public class TopicServiceImpl implements TopicService {
         List<Topic> topicList= topicDao.findAllTopics();
 
         for(Topic topic: topicList){
-            setAuthorName(topic);
+            setAuthorSsoId(topic);
         }
 
         return topicList;
@@ -40,7 +40,7 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public Topic getById(int id) {
         Topic topic = topicDao.getById(id);
-        setAuthorName(topic);
+        setAuthorSsoId(topic);
         return topic;
     }
 
@@ -53,7 +53,7 @@ public class TopicServiceImpl implements TopicService {
     public List<Topic> findByTitle(String theTitle) {
         List<Topic> topicList = topicDao.findByTitle(theTitle);
         for(Topic topic: topicList){
-            setAuthorName(topic);
+            setAuthorSsoId(topic);
         }
         return topicList;
     }
@@ -69,18 +69,14 @@ public class TopicServiceImpl implements TopicService {
     }
 
 
-    private void setAuthorName(Topic topic){
+    private void setAuthorSsoId(Topic topic){
         String authorName = null;
-        try {
-            AppUser appUser = userDao.findById(topic.getAuthorId());
-            authorName = appUser.getSsoId();
-        }
-        catch (Exception exc){
-            exc.printStackTrace();
-            authorName = "User doesn't exist";
-        }
-        finally {
-            topic.setAuthorName(authorName);
-        }
+
+        AppUser author = userDao.findById(topic.getAuthorId());
+
+        if(author != null)
+            authorName = author.getSsoId();
+
+        topic.setAuthorName(authorName);
     }
 }

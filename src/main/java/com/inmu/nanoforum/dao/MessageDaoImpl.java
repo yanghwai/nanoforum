@@ -23,9 +23,9 @@ public class MessageDaoImpl implements MessageDao {
     public List<Message> getInbox(AppUser appUser) {
         Session session = sessionFactory.getCurrentSession();
 
-        Query<Message> query = session.createQuery("from Message where receiver=:theUser order by sendTime", Message.class);
+        Query<Message> query = session.createQuery("from Message where receiverId=:userId order by sendTime", Message.class);
 
-        query.setParameter("theUser", appUser);
+        query.setParameter("userId", appUser.getId());
 
         return query.getResultList();
     }
@@ -34,9 +34,9 @@ public class MessageDaoImpl implements MessageDao {
     public List<Message> getOutbox(AppUser appUser) {
         Session session = sessionFactory.getCurrentSession();
 
-        Query<Message> query = session.createQuery("from Message where sender=:theUser order by sendTime", Message.class);
+        Query<Message> query = session.createQuery("from Message where senderId=:userId order by sendTime", Message.class);
 
-        query.setParameter("theUser", appUser);
+        query.setParameter("userId", appUser.getId());
 
         return query.getResultList();
     }
@@ -47,4 +47,12 @@ public class MessageDaoImpl implements MessageDao {
 
         session.saveOrUpdate(message);
     }
+
+    @Override
+    public Message getById(int msgId) {
+        Session session = sessionFactory.getCurrentSession();
+
+        return session.get(Message.class, msgId);
+    }
+
 }

@@ -25,13 +25,25 @@ public class Message {
     @Column(name = "content")
     private String content;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "uid_sender")
-    private AppUser sender;
+    @Column(name = "uid_sender")
+    private int senderId;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "uid_receiver")
-    private AppUser receiver;
+    @Column(name = "uid_receiver")
+    private int receiverId;
+
+    @Transient
+    private String senderSsoId;
+
+    @Transient
+    private String receiverSsoId;
+
+//    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+//    @JoinColumn(name = "uid_sender")
+//    private AppUser sender;
+//
+//    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+//    @JoinColumn(name = "uid_receiver")
+//    private AppUser receiver;
 
     public int getId() {
         return id;
@@ -73,20 +85,36 @@ public class Message {
         this.content = content;
     }
 
-    public AppUser getSender() {
-        return sender;
+    public String getSenderSsoId() {
+        return senderSsoId;
     }
 
-    public void setSender(AppUser sender) {
-        this.sender = sender;
+    public void setSenderSsoId(String senderSsoId) {
+        this.senderSsoId = senderSsoId;
     }
 
-    public AppUser getReceiver() {
-        return receiver;
+    public String getReceiverSsoId() {
+        return receiverSsoId;
     }
 
-    public void setReceiver(AppUser receiver) {
-        this.receiver = receiver;
+    public void setReceiverSsoId(String receiverSsoId) {
+        this.receiverSsoId = receiverSsoId;
+    }
+
+    public int getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(int senderId) {
+        this.senderId = senderId;
+    }
+
+    public int getReceiverId() {
+        return receiverId;
+    }
+
+    public void setReceiverId(int receiverId) {
+        this.receiverId = receiverId;
     }
 
     @Override
@@ -97,8 +125,10 @@ public class Message {
                 ", deleted=" + deleted +
                 ", sendTime=" + sendTime +
                 ", content='" + content + '\'' +
-                ", sender=" + sender +
-                ", receiver=" + receiver +
+                ", senderId=" + senderId +
+                ", receiverId=" + receiverId +
+                ", senderSsoId='" + senderSsoId + '\'' +
+                ", receiverSsoId='" + receiverSsoId + '\'' +
                 '}';
     }
 }

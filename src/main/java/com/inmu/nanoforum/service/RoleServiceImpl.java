@@ -11,21 +11,26 @@ import java.util.List;
 @Service("roleService")
 @Transactional
 public class RoleServiceImpl implements RoleService {
+
+    private RoleDao roleDao;
+
     @Autowired
-    RoleDao dao;
+    public void setRoleDao(RoleDao roleDao) {
+        this.roleDao = roleDao;
+    }
 
     @Override
     public UserRole findById(int id) {
-        return dao.findById(id);
+        return roleDao.findById(id);
     }
 
     @Override
     public UserRole findByType(String type){
-        return dao.findByType(type);
+        return roleDao.findByType(type);
     }
 
     @Override
     public List<UserRole> findAll() {
-        return dao.findAll();
+        return roleDao.findAll();
     }
 }

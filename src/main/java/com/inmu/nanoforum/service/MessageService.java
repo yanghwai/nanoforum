@@ -11,4 +11,6 @@ public interface MessageService {
     List<Message> getOutbox(AppUser appUser);
 
     void save(Message message);
+
+    Message getById(int msgId);
 }

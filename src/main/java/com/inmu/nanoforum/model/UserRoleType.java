@@ -5,7 +5,7 @@ public enum UserRoleType {
     DBA("DBA"),
     ADMIN("ADMIN");
 
-    String userProfileType;
+    final String userProfileType;
 
     UserRoleType(String userProfileType){
         this.userProfileType = userProfileType;
