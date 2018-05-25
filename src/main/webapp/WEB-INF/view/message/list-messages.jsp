@@ -36,10 +36,6 @@
 
                 <c:forEach var="tmpMsg" items="${inbox}">
 
-                    <c:url var="replyLink" value="/message/sendNewMessage">
-                        <c:param name="userId" value="${tmpMsg.senderId}"/>
-                    </c:url>
-
                     <c:url var="userInfoLink" value="/user/info">
                         <c:param name="userId" value="${tmpMsg.senderId}"/>
                     </c:url>
@@ -59,19 +55,20 @@
                             <input type="hidden" name="msgId" value="${tmpMsg.id}"/>
                             <td>
                                 <c:if test="${not tmpMsg.read}">
-                                    <input type="submit" value="Read" class="btn btn-success"/>
+                                    <input type="submit" value="Read" class="btn btn-primary"/>
                                 </c:if>
                                 <c:if test="${tmpMsg.read}">
-                                    <input type="submit" value="Read" class="btn btn-success" disabled/>
+                                    <input type="submit" value="Read" class="btn btn-primary" disabled/>
                                 </c:if>
                             </td>
                         </form:form>
 
                         <td>
                             <c:if test="${not empty tmpMsg.senderSsoId}">
-                                <form:form action="${replyLink}" method="get">
-                                    <button class="btn btn-primary" type="submit">Reply</button>
-                                </form:form>
+                                <c:url var="sendMsgLink" value="${pageContext.request.contextPath}/message/sendNewMessage">
+                                    <c:param name="userId" value="${tmpMsg.senderId}"/>
+                                </c:url>
+                                <a href="${sendMsgLink}"><button class="btn btn-success">Reply</button></a>
                             </c:if>
                         </td>
 

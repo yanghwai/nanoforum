@@ -44,11 +44,11 @@
                     </table>
             </div>
 
-            <div class="input-group">
+            <div class="input-group-lg">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Message</span>
                 </div>
-                <form:textarea path="content" class="form-control" aria-label="With textarea" />
+                <form:textarea rows="10" path="content" class="form-control" aria-label="With textarea" />
             </div>
 
             <hr>

@@ -6,7 +6,7 @@
 
     <groupId>com.inmu</groupId>
     <artifactId>nanoforum</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
     <packaging>war</packaging>
 
     <properties>
