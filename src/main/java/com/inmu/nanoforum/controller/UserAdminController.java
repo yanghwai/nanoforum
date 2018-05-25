@@ -1,8 +1,6 @@
 package com.inmu.nanoforum.controller;
 
 import com.inmu.nanoforum.model.AppUser;
-import com.inmu.nanoforum.model.UserRole;
-import com.inmu.nanoforum.service.RoleService;
 import com.inmu.nanoforum.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -14,28 +12,24 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 @Controller
 @RequestMapping("/systems/user")
-@SessionAttributes({"theUser", "roles"})
+@SessionAttributes({"theUser"})
 
 public class UserAdminController {
 
     private final Logger logger = Logger.getLogger(getClass().getName());
 
     private UserService userService;
-    private RoleService roleService;
+
     // inject user service
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
-    }
-
-    @Autowired
-    public void setRoleService(RoleService roleService) {
-        this.roleService = roleService;
     }
 
 
@@ -51,7 +45,7 @@ public class UserAdminController {
         return "system/list-users";
     }
 
-    @GetMapping("/delete")
+    @PostMapping("/delete")
     public String deleteUser(@RequestParam("userId") int theId){
         userService.deleteById(theId);
         return "redirect:/systems/user/list";
@@ -60,7 +54,7 @@ public class UserAdminController {
     @GetMapping("/editInfo")
     public String editUserInfo(@RequestParam("userId") int uid, Model model){
 
-        AppUser appUser = userService.findById(uid);
+        AppUser appUser = userService.getById(uid);
 
         model.addAttribute("theUser", appUser);
 
@@ -68,20 +62,14 @@ public class UserAdminController {
 
     }
 
-    @InitBinder
+    @InitBinder("theUser")
     public void initBinder(WebDataBinder dataBinder){
         StringTrimmerEditor trimmerEditor = new StringTrimmerEditor(true);
         dataBinder.registerCustomEditor(String.class, trimmerEditor);
-        dataBinder.setDisallowedFields("id", "password");
-//        dataBinder.registerCustomEditor(UserRole.class, new RoleEditor());
+        dataBinder.setDisallowedFields("id", "ssoId" ,"password", "userRoles");
 
     }
 
-
-    @ModelAttribute("roles")
-    public List<UserRole> initializeUserRoles(){
-        return roleService.findAll();
-    }
 
     @PostMapping("/processUserInfoEdit")
     public String processEditUserInfo(@Valid @ModelAttribute("theUser") AppUser appUser,
@@ -95,22 +83,8 @@ public class UserAdminController {
 
         if(bindingResult.hasErrors()){
             logger.warning(bindingResult.toString());
-            model.addAttribute("theUser", userService.findBySSO(ssoId));
+            model.addAttribute("theUser", userService.getBySsoId(ssoId));
             model.addAttribute("errorMessage","cannot be empty");
-
-            return "system/user-info-edit";
-        }
-
-        if(!userService.isUserSSOUnique(ssoId)){
-            model.addAttribute("theUser", userService.findBySSO(ssoId));
-            model.addAttribute("errorMessage","Username already exists");
-
-            return "system/user-info-edit";
-        }
-
-        if(appUser.getRoleList().size()==0){
-            model.addAttribute("theUser", userService.findBySSO(ssoId));
-            model.addAttribute("errorMessage", "Must have at least 1 role");
 
             return "system/user-info-edit";
         }
@@ -122,6 +96,16 @@ public class UserAdminController {
         sessionStatus.setComplete();
 
         return "redirect:/systems/user/list";
+    }
+
+
+    @GetMapping("/search")
+    public String searchUser(@RequestParam("theUsername") String theUsername,
+                             Model model){
+        List<AppUser> userList = userService.searchBySsoId(theUsername);
+        model.addAttribute("users", userList);
+
+        return "system/list-users";
     }
 
 }

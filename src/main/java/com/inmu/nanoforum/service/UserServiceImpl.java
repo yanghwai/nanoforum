@@ -1,36 +1,25 @@
 package com.inmu.nanoforum.service;
 
-import com.inmu.nanoforum.dao.RoleDao;
 import com.inmu.nanoforum.dao.UserDao;
 import com.inmu.nanoforum.model.AppUser;
-import com.inmu.nanoforum.model.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service("userService")
 @Transactional
 public class UserServiceImpl implements UserService {
 
     private UserDao userDao;
-    private RoleDao roleDao;
 
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
-    }
-
-    @Autowired
-    public void setRoleDao(RoleDao roleDao) {
-        this.roleDao = roleDao;
     }
 
     @Autowired
@@ -42,18 +31,15 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public AppUser findById(int id) {
-        AppUser user = userDao.findById(id);
-        setRoleList(user);
-        return user;
+    public AppUser getById(int id) {
+
+        return userDao.getById(id);
     }
 
     @Override
-    public AppUser findBySSO(String sso) {
+    public AppUser getBySsoId(String ssoId) {
 
-        AppUser user = userDao.findBySSO(sso);
-        setRoleList(user);
-        return user;
+        return userDao.getBySsoId(ssoId);
     }
 
     @Override
@@ -70,7 +56,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void updateUser(AppUser appUser) {
-        AppUser theUser = userDao.findById(appUser.getId());
+        AppUser theUser = userDao.getById(appUser.getId());
         if(theUser!=null){
             theUser.setSsoId(appUser.getSsoId());
             if(!appUser.getPassword().equals(theUser.getPassword())){
@@ -79,14 +65,13 @@ public class UserServiceImpl implements UserService {
             theUser.setFirstName(appUser.getFirstName());
             theUser.setLastName(appUser.getLastName());
             theUser.setEmail(appUser.getEmail());
-            theUser.setRoleList(appUser.getRoleList());
-            saveUserRoles(theUser);
+            theUser.setUserRoles(appUser.getUserRoles());
         }
     }
 
     @Override
-    public void deleteUserBySSO(String sso) {
-        userDao.deleteBySSO(sso);
+    public void deleteUserBySsoId(String ssoId) {
+        userDao.deleteBySsoId(ssoId);
     }
 
     @Override
@@ -96,36 +81,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<AppUser> findAllUsers() {
-        List<AppUser> userList = userDao.findAllUsers();
-        for(AppUser user : userList){
-            setRoleList(user);
-        }
 
-        return userList;
+        return userDao.getAllUsers();
     }
 
     @Override
     public boolean isUserSSOUnique(String sso) {
-        AppUser AppUser = findBySSO(sso);
-        return (AppUser != null);
+        AppUser AppUser = getBySsoId(sso);
+        return (AppUser == null);
     }
 
-    private void setRoleList(AppUser appUser){
-        List<String> roleList = new ArrayList<>();
-        for(UserRole role: appUser.getUserRoles()){
-            roleList.add(role.getType());
-        }
-
-        appUser.setRoleList(roleList);
-    }
-
-    private void saveUserRoles(AppUser appUser){
-        Set<UserRole> roleSet = new HashSet<>();
-        for(String roleType: appUser.getRoleList()){
-            roleSet.add(roleDao.findByType(roleType));
-        }
-
-        appUser.setUserRoles(roleSet);
+    @Override
+    public List<AppUser> searchBySsoId(String ssoId) {
+        return userDao.searchBySsoId(ssoId);
     }
 
 }

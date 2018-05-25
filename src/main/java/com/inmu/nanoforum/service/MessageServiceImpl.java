@@ -72,12 +72,12 @@ public class MessageServiceImpl implements MessageService {
         String senderSsoId = null;
         String receiverSsoId = null;
 
-        AppUser sender = userDao.findById(message.getSenderId());
+        AppUser sender = userDao.getById(message.getSenderId());
         if(sender!=null)
         senderSsoId = sender.getSsoId();
 
 
-        AppUser receiver = userDao.findById(message.getReceiverId());
+        AppUser receiver = userDao.getById(message.getReceiverId());
         if(receiver!=null)
         receiverSsoId = receiver.getSsoId();
 

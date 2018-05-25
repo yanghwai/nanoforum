@@ -22,7 +22,7 @@ public class UserController {
 
     @GetMapping("/info")
     public String showUserInfoPage(@RequestParam("userId") int uid, Model model){
-        AppUser appUser = userService.findById(uid);
+        AppUser appUser = userService.getById(uid);
         if(appUser == null){
             model.addAttribute("errorMessage", "User does not exists.");
             return "error";
@@ -31,5 +31,6 @@ public class UserController {
         model.addAttribute("user", appUser);
         return "user/user-info";
     }
+
 
 }

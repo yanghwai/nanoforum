@@ -30,7 +30,9 @@
             </form:form>
 
             <%-- add a search box--%>
-            <form:form action="search" method="post">
+            <c:url var="searchTopicLink" value="${pageContext.request.contextPath}/topic/search"/>
+
+            <form:form action="${searchTopicLink}" method="get">
                 Search title: <input type="text" name="theTitle" title="Search Title"/>
                 <input type="submit" value="Search" class="btn btn-secondary"/>
             </form:form>
@@ -51,12 +53,12 @@
                 <tbody>
                     <c:forEach var="tmpTopic" items="${topics}">
                         <%--construct an "show topic details page" link with topic id--%>
-                        <c:url var="topicLink" value="/topic/showTopicPage">
+                        <c:url var="topicLink" value="${pageContext.request.contextPath}/topic/showTopicPage">
                             <c:param name="topicId" value="${tmpTopic.id}"/>
                         </c:url>
 
                         <%--Link for checking user info--%>
-                        <c:url var="userInfoLink" value="/user/info">
+                        <c:url var="userInfoLink" value="${pageContext.request.contextPath}/user/info">
                             <c:param name="userId" value="${tmpTopic.authorId}"/>
                         </c:url>
 

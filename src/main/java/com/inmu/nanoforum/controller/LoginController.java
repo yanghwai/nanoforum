@@ -21,7 +21,7 @@ public class LoginController {
     @GetMapping(value = "/login")
     public String showLoginPage(){
         if(isCurrentAuthenticationAnonymous())
-            return "login";
+            return "user/login";
         else
             return "redirect:/";
     }

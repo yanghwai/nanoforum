@@ -40,16 +40,16 @@ public class TopicController {
 
     @GetMapping("/list")
     public String listTopics(Model model) {
-        List<Topic> topicList = topicService.findAllTopics();
+        List<Topic> topicList = topicService.getAllTopics();
         model.addAttribute("topics", topicList);
 
         return "topic/list-topics";
     }
 
 
-    @PostMapping("/search")
+    @GetMapping("/search")
     public String searchTopics(@RequestParam("theTitle") String theTitle, Model model) {
-        List<Topic> topicList = topicService.findByTitle(theTitle);
+        List<Topic> topicList = topicService.searchByTitle(theTitle);
 
         model.addAttribute("topics", topicList);
 
@@ -73,7 +73,7 @@ public class TopicController {
 
         logger.info(">>>Current username is:" + currentUsername);
 
-        AppUser currentUser = userService.findBySSO(currentUsername);
+        AppUser currentUser = userService.getBySsoId(currentUsername);
 
         topic.setAuthorName(currentUsername);
         topic.setAuthorId(currentUser.getId());

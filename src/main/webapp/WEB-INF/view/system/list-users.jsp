@@ -24,14 +24,13 @@
     <div class="container">
         <div>
 
-            <%--put a new button: add user--%>
-            <a href="${pageContext.request.contextPath}/systems/user/showAddUserForm">
-                <button type="button" class="btn btn-primary">Add User</button>
-            </a>
 
-            <%-- add a search box--%>
-            <form:form action="search" method="post">
-                Search user: <input type="text" name="theSearchName" title="Search User"/>
+            <%--put a new button: add user--%>
+
+
+            <c:url var="searchUserLink" value="${pageContext.request.contextPath}/systems/user/search"/>
+            <form:form action="${searchUserLink}" method="get">
+                Search user: <input type="text" name="theUsername" title="Search User"/>
                 <input type="submit" value="Search" class="btn btn-secondary"/>
             </form:form>
 
@@ -51,16 +50,16 @@
                 <tbody>
                     <c:forEach var="tmpUser" items="${users}">
                         <%--construct an "update" link with user id--%>
-                        <c:url var="updateLink" value="/systems/user/editInfo">
+                        <c:url var="updateLink" value="${pageContext.request.contextPath}/systems/user/editInfo">
                             <c:param name="userId" value="${tmpUser.id}"/>
                         </c:url>
 
-                        <c:url var="userInfoLink" value="/user/info">
+                        <c:url var="userInfoLink" value="${pageContext.request.contextPath}/user/info">
                             <c:param name="userId" value="${tmpUser.id}"/>
                         </c:url>
 
                         <%--construct a "delete" link with user id--%>
-                        <c:url var="deleteLink" value="/systems/user/delete"/>
+                        <c:url var="deleteLink" value="${pageContext.request.contextPath}/systems/user/delete"/>
 
                         <tr>
                             <td>
@@ -75,12 +74,14 @@
                                     <button class="btn btn-warning">Update</button>
                                 </a>
                             </td>
-                            <td>
-                                <form:form method="post" action="${deleteLink}" onsubmit="return submitResult();">
-                                    <input type="hidden" name="userId" value="${tmpUser.id}"/>
+
+                            <form:form method="post" action="${deleteLink}" onsubmit="return submitResult();">
+                                <input type="hidden" name="userId" value="${tmpUser.id}"/>
+                                <td>
                                     <button type="submit" class="btn btn-danger">Delete</button>
-                                </form:form>
-                            </td>
+                                 </td>
+                            </form:form>
+
                         </tr>
                     </c:forEach>
                 </tbody>

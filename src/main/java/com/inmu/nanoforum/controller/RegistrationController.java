@@ -45,7 +45,7 @@ public class RegistrationController {
     @GetMapping("/showRegistrationForm")
     public String showLoginPage(Model model){
         model.addAttribute("appUser", new AppUser());
-        return "registration-form";
+        return "user/registration-form";
     }
 
     @PostMapping("/processRegistrationForm")
@@ -63,7 +63,7 @@ public class RegistrationController {
             model.addAttribute("appUser", new AppUser());
             model.addAttribute("registrationError", "Username/password cannot be empty.");
             logger.warning(">>> Username/password cannot be empty.");
-            return "registration-form";
+            return "user/registration-form";
         }
 
         // check the database if user already exists
@@ -74,7 +74,7 @@ public class RegistrationController {
 
             logger.warning(">>> Username already exists.");
 
-            return "registration-form";
+            return "user/registration-form";
         }
 
         // no errors- proceed to save user
@@ -90,7 +90,7 @@ public class RegistrationController {
 
         logger.info(">>>Successfully created user: "+ ssoId);
 
-        return "registration-confirmation";
+        return "user/registration-confirmation";
     }
 
 }

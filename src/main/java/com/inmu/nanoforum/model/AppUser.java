@@ -2,7 +2,6 @@ package com.inmu.nanoforum.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -40,15 +39,12 @@ public class AppUser {
     private Set<UserRole> userRoles;
 
 
-    @Transient
-    private List<String> roleList;
 
-
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -98,18 +94,6 @@ public class AppUser {
 
     public void setUserRoles(Set<UserRole> userRoles) {
         this.userRoles = userRoles;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public List<String> getRoleList() {
-        return roleList;
-    }
-
-    public void setRoleList(List<String> roleList) {
-        this.roleList = roleList;
     }
 
     /*

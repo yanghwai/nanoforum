@@ -5,15 +5,17 @@ import com.inmu.nanoforum.model.AppUser;
 import java.util.List;
 
 public interface UserDao {
-    AppUser findById(int id);
+    AppUser getById(int id);
 
-    AppUser findBySSO(String sso);
+    AppUser getBySsoId(String ssoId);
 
     void save(AppUser AppUser);
 
-    void deleteBySSO(String sso);
+    void deleteBySsoId(String sso);
 
-    List<AppUser> findAllUsers();
+    List<AppUser> getAllUsers();
 
     void deleteById(int id);
+
+    List<AppUser> searchBySsoId(String ssoId);
 }

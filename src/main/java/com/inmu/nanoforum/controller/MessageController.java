@@ -54,7 +54,7 @@ public class MessageController {
     @GetMapping("/list")
     public String showMyMessages(Model model, Principal principal){
 
-        AppUser currentUser = userService.findBySSO(principal.getName());
+        AppUser currentUser = userService.getBySsoId(principal.getName());
 
         List<Message> inbox = messageService.getInbox(currentUser);
 
@@ -71,7 +71,7 @@ public class MessageController {
     public String showNewMessagePage(@RequestParam("userId") int uid, Model model, Principal principal){
         Message message = new Message();
 
-        AppUser theReceiver = userService.findById(uid);
+        AppUser theReceiver = userService.getById(uid);
 
         if(theReceiver==null){
             model.addAttribute("errorMessage","Receiver does not exist!");
@@ -81,7 +81,7 @@ public class MessageController {
         message.setReceiverId(theReceiver.getId());
         message.setReceiverSsoId(theReceiver.getSsoId());
 
-        AppUser currentUser = userService.findBySSO(principal.getName());
+        AppUser currentUser = userService.getBySsoId(principal.getName());
         message.setSenderId(currentUser.getId());
         message.setSenderSsoId(currentUser.getSsoId());
 

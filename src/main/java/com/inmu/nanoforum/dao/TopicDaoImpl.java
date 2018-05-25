@@ -19,7 +19,7 @@ public class TopicDaoImpl implements TopicDao {
     }
 
     @Override
-    public List<Topic> findAllTopics() {
+    public List<Topic> getAllTopics() {
         Session session = sessionFactory.getCurrentSession();
 
         Query<Topic> query = session.createQuery("from Topic order by postTime", Topic.class);
@@ -42,7 +42,7 @@ public class TopicDaoImpl implements TopicDao {
     }
 
     @Override
-    public List<Topic> findByTitle(String theTitle) {
+    public List<Topic> searchByTitle(String theTitle) {
         Session session = sessionFactory.getCurrentSession();
 
         Query<Topic> query = session.createQuery("from Topic where lower(title) like :title order by postTime", Topic.class);

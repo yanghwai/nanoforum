@@ -5,13 +5,13 @@ import com.inmu.nanoforum.model.Topic;
 import java.util.List;
 
 public interface TopicDao {
-    List<Topic> findAllTopics();
+    List<Topic> getAllTopics();
 
     Topic getById(int id);
 
     void save(Topic topic);
 
-    List<Topic> findByTitle(String theTitle);
+    List<Topic> searchByTitle(String theTitle);
 
     void delete(Topic topic);
 

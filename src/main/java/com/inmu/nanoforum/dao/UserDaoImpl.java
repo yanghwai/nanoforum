@@ -22,7 +22,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public AppUser findById(int id) {
+    public AppUser getById(int id) {
 
         Session session = sessionFactory.getCurrentSession();
 
@@ -34,11 +34,11 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public AppUser findBySSO(String sso) {
-        logger.info("SSO : {}"+ sso);
+    public AppUser getBySsoId(String ssoId) {
+        logger.info("SSO : {}"+ ssoId);
         Session session = sessionFactory.getCurrentSession();
         Query<AppUser> query = session.createQuery("from AppUser where ssoId= :theSsoId", AppUser.class);
-        query.setParameter("theSsoId", sso);
+        query.setParameter("theSsoId", ssoId);
 
         query.setMaxResults(1);
         List<AppUser> users = query.getResultList();
@@ -58,7 +58,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void deleteBySSO(String sso) {
+    public void deleteBySsoId(String sso) {
 
         Session session = sessionFactory.getCurrentSession();
 
@@ -69,7 +69,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<AppUser> findAllUsers() {
+    public List<AppUser> getAllUsers() {
 
         Session session = sessionFactory.getCurrentSession();
 
@@ -84,5 +84,16 @@ public class UserDaoImpl implements UserDao {
 
         AppUser theUser = session.get(AppUser.class, id);
         session.delete(theUser);
+    }
+
+    @Override
+    public List<AppUser> searchBySsoId(String ssoId) {
+        Session session = sessionFactory.getCurrentSession();
+
+        Query<AppUser> query = session.createQuery("from AppUser where lower(ssoId) like :theSsoId order by ssoId", AppUser.class);
+        query.setParameter("theSsoId", ssoId.toLowerCase()+"%");
+        query.setMaxResults(100);
+
+        return query.getResultList();
     }
 }

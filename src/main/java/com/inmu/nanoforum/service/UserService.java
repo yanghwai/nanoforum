@@ -5,19 +5,21 @@ import com.inmu.nanoforum.model.AppUser;
 import java.util.List;
 
 public interface UserService {
-    AppUser findById(int id);
+    AppUser getById(int id);
 
-    AppUser findBySSO(String sso);
+    AppUser getBySsoId(String ssoId);
 
     void saveUser(AppUser appUser);
 
     void updateUser(AppUser appUser);
 
-    void deleteUserBySSO(String sso);
+    void deleteUserBySsoId(String ssoId);
 
     void deleteById(int id);
 
     List<AppUser> findAllUsers();
 
-    boolean isUserSSOUnique(String sso);
+    boolean isUserSSOUnique(String ssoId);
+
+    List<AppUser> searchBySsoId(String ssoId);
 }

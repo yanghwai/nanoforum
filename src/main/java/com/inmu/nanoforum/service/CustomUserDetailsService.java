@@ -31,7 +31,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String ssoId)
             throws UsernameNotFoundException {
-        AppUser AppUser = userService.findBySSO(ssoId);
+        AppUser AppUser = userService.getBySsoId(ssoId);
         logger.info("AppUser : {}"+ AppUser);
         if(AppUser ==null){
             logger.info("AppUser not found");

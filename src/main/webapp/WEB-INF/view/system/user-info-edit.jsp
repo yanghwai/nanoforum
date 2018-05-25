@@ -34,7 +34,7 @@
 
                         <tr>
                             <td>Username:</td>
-                            <td><form:input path="ssoId"/></td>
+                            <td>${theUser.ssoId}</td>
                         </tr>
 
                         <tr>
@@ -60,9 +60,11 @@
                         <tr>
                             <td>Roles:</td>
                             <td>
-                                <form:checkboxes path="roleList" items="${roles}" itemValue="type" itemLabel="type"/>
+                                <c:forEach items="${theUser.userRoles}" var="role">
+                                    ${role.type};
+                                </c:forEach>
                             </td>
-                                <form:errors path="roleList"/>
+
                         </tr>
                     </tbody>
                 </table>

@@ -36,7 +36,7 @@
 
                 <c:forEach var="tmpMsg" items="${inbox}">
 
-                    <c:url var="userInfoLink" value="/user/info">
+                    <c:url var="userInfoLink" value="${pageContext.request.contextPath}/user/info">
                         <c:param name="userId" value="${tmpMsg.senderId}"/>
                     </c:url>
                     <tr>

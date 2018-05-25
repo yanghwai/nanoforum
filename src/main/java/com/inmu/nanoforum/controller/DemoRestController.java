@@ -31,7 +31,7 @@ public class DemoRestController {
 
     @GetMapping("/topics")
     public List<Topic> getTopics(){
-        return topicService.findAllTopics();
+        return topicService.getAllTopics();
     }
 
     @GetMapping("/users")
