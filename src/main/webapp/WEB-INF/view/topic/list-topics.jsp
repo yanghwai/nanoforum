@@ -55,8 +55,8 @@
                             <c:param name="topicId" value="${tmpTopic.id}"/>
                         </c:url>
 
-                        <%--construct a "send message" link with user id--%>
-                        <c:url var="sendMsgLink" value="/message/sendNewMessage">
+                        <%--Link for checking user info--%>
+                        <c:url var="userInfoLink" value="/user/info">
                             <c:param name="userId" value="${tmpTopic.authorId}"/>
                         </c:url>
 
@@ -72,7 +72,7 @@
                                     User Deleted
                                 </c:if>
                                 <c:if test="${not empty tmpTopic.authorName}">
-                                    <a href="${sendMsgLink}">${tmpTopic.authorName}</a>
+                                    <a href="${userInfoLink}">${tmpTopic.authorName}</a>
                                 </c:if>
                             </td>
                             <td>${tmpTopic.postTime}</td>

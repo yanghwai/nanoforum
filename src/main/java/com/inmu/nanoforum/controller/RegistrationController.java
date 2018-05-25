@@ -50,13 +50,13 @@ public class RegistrationController {
 
     @PostMapping("/processRegistrationForm")
     public String processRegistration(
-            @Valid @ModelAttribute("appUser") AppUser appAppUser,
+            @Valid @ModelAttribute("appUser") AppUser appUser,
             BindingResult bindingResult,
             Model model){
 
-        System.out.println(">>>User info on registration form: "+ appAppUser);
+        logger.info(">>>User info on registration form: "+ appUser);
 
-        String ssoId = appAppUser.getSsoId();
+        String ssoId = appUser.getSsoId();
 
         // form validation
         if(bindingResult.hasErrors()){
@@ -68,7 +68,7 @@ public class RegistrationController {
 
         // check the database if user already exists
 
-        if(userService.isUserSSOUnique(ssoId)){
+        if(!userService.isUserSSOUnique(ssoId)){
             model.addAttribute("appUser", new AppUser());
             model.addAttribute("registrationError","Username already exists.");
 
@@ -84,9 +84,9 @@ public class RegistrationController {
         Set<UserRole> roleSet = new HashSet<>();
         roleSet.add(role);
 
-        appAppUser.setUserRoles(roleSet);
+        appUser.setUserRoles(roleSet);
 
-        userService.saveUser(appAppUser);
+        userService.saveUser(appUser);
 
         logger.info(">>>Successfully created user: "+ ssoId);
 

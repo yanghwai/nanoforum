@@ -1,24 +1,36 @@
 package com.inmu.nanoforum.service;
 
+import com.inmu.nanoforum.dao.RoleDao;
 import com.inmu.nanoforum.dao.UserDao;
 import com.inmu.nanoforum.model.AppUser;
+import com.inmu.nanoforum.model.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service("userService")
 @Transactional
 public class UserServiceImpl implements UserService {
 
     private UserDao userDao;
+    private RoleDao roleDao;
+
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
+    }
+
+    @Autowired
+    public void setRoleDao(RoleDao roleDao) {
+        this.roleDao = roleDao;
     }
 
     @Autowired
@@ -31,16 +43,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public AppUser findById(int id) {
-        return userDao.findById(id);
+        AppUser user = userDao.findById(id);
+        setRoleList(user);
+        return user;
     }
 
     @Override
     public AppUser findBySSO(String sso) {
-        return userDao.findBySSO(sso);
+
+        AppUser user = userDao.findBySSO(sso);
+        setRoleList(user);
+        return user;
     }
 
     @Override
     public void saveUser(AppUser appUser) {
+
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         userDao.save(appUser);
     }
@@ -52,16 +70,17 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void updateUser(AppUser appUser) {
-        AppUser entity = userDao.findById(appUser.getId());
-        if(entity!=null){
-            entity.setSsoId(appUser.getSsoId());
-            if(!appUser.getPassword().equals(entity.getPassword())){
-                entity.setPassword(passwordEncoder.encode(appUser.getPassword()));
+        AppUser theUser = userDao.findById(appUser.getId());
+        if(theUser!=null){
+            theUser.setSsoId(appUser.getSsoId());
+            if(!appUser.getPassword().equals(theUser.getPassword())){
+                theUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
             }
-            entity.setFirstName(appUser.getFirstName());
-            entity.setLastName(appUser.getLastName());
-            entity.setEmail(appUser.getEmail());
-            entity.setUserRoles(appUser.getUserRoles());
+            theUser.setFirstName(appUser.getFirstName());
+            theUser.setLastName(appUser.getLastName());
+            theUser.setEmail(appUser.getEmail());
+            theUser.setRoleList(appUser.getRoleList());
+            saveUserRoles(theUser);
         }
     }
 
@@ -77,7 +96,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<AppUser> findAllUsers() {
-        return userDao.findAllUsers();
+        List<AppUser> userList = userDao.findAllUsers();
+        for(AppUser user : userList){
+            setRoleList(user);
+        }
+
+        return userList;
     }
 
     @Override
@@ -85,4 +109,23 @@ public class UserServiceImpl implements UserService {
         AppUser AppUser = findBySSO(sso);
         return (AppUser != null);
     }
+
+    private void setRoleList(AppUser appUser){
+        List<String> roleList = new ArrayList<>();
+        for(UserRole role: appUser.getUserRoles()){
+            roleList.add(role.getType());
+        }
+
+        appUser.setRoleList(roleList);
+    }
+
+    private void saveUserRoles(AppUser appUser){
+        Set<UserRole> roleSet = new HashSet<>();
+        for(String roleType: appUser.getRoleList()){
+            roleSet.add(roleDao.findByType(roleType));
+        }
+
+        appUser.setUserRoles(roleSet);
+    }
+
 }

@@ -2,6 +2,7 @@ package com.inmu.nanoforum.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -37,6 +38,10 @@ public class AppUser {
             joinColumns = { @JoinColumn(name = "USER_ID") },
             inverseJoinColumns = { @JoinColumn(name = "role_id") })
     private Set<UserRole> userRoles;
+
+
+    @Transient
+    private List<String> roleList;
 
 
     public Integer getId() {
@@ -95,16 +100,32 @@ public class AppUser {
         this.userRoles = userRoles;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public List<String> getRoleList() {
+        return roleList;
+    }
+
+    public void setRoleList(List<String> roleList) {
+        this.roleList = roleList;
+    }
 
     /*
      * DO-NOT-INCLUDE passwords in toString function.
      * It is done here just for convenience purpose.
      */
+
     @Override
     public String toString() {
-        return "AppUser [id=" + id + ", ssoId=" + ssoId + ", password=" + password
-                + ", firstName=" + firstName + ", lastName=" + lastName
-                + ", email=" + email + "]";
+        return "AppUser{" +
+                "id=" + id +
+                ", ssoId='" + ssoId + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", userRoles=" + userRoles +
+                '}';
     }
-
 }

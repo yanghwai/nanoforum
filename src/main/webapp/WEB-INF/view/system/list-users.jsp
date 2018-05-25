@@ -51,7 +51,7 @@
                 <tbody>
                     <c:forEach var="tmpUser" items="${users}">
                         <%--construct an "update" link with user id--%>
-                        <c:url var="updateLink" value="/user/showFormForUpdate">
+                        <c:url var="updateLink" value="/systems/user/editInfo">
                             <c:param name="userId" value="${tmpUser.id}"/>
                         </c:url>
 

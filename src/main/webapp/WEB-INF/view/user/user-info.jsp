@@ -51,8 +51,8 @@
                     <tr>
                         <td>Roles:</td>
                         <td>
-                            <c:forEach var="role" items="${user.userRoles}">
-                                ${role.type};
+                            <c:forEach var="role" items="${user.roleList}">
+                                ${role};
                             </c:forEach>
                         </td>
                     </tr>

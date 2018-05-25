@@ -6,9 +6,11 @@ import com.inmu.nanoforum.service.MessageService;
 import com.inmu.nanoforum.service.UserService;
 import com.inmu.nanoforum.util.DateTimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
@@ -40,7 +42,11 @@ public class MessageController {
 
     @InitBinder
     public void initBinder(WebDataBinder dataBinder){
-        dataBinder.setDisallowedFields("id","sender","receiver");
+        StringTrimmerEditor trimmerEditor = new StringTrimmerEditor(true);
+
+        dataBinder.registerCustomEditor(String.class, trimmerEditor);
+
+        dataBinder.setDisallowedFields("id","senderId","receiverId");
 
     }
 
@@ -86,8 +92,16 @@ public class MessageController {
 
     @PostMapping("/send")
     public String sendMessage(@ModelAttribute("theMessage") Message message,
-                             // BindingResult bindingResult,
-                              SessionStatus sessionStatus){
+                              BindingResult bindingResult,
+                              SessionStatus sessionStatus,
+                              Model model){
+
+        if(bindingResult.hasErrors()){
+            model.addAttribute("theMessage", message);
+            model.addAttribute("errorMessage", "Message cannot be empty");
+
+            return "message/message-form";
+        }
 
         message.setSendTime(DateTimeUtil.getCurrentDateTime());
         message.setDeleted(false);
